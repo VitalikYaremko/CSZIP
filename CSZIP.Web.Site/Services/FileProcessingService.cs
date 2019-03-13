@@ -1,14 +1,59 @@
-﻿using System;
+﻿using CSZIP.Web.Site.Helpers;
+using CSZIP.Web.Site.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CSZIP.Web.Site.Services
 {
     public class FileProcessingService
     {
+        public static string ParseZipDirToJSON(string filePath)
+        {
+            try
+            {
+                List<string> paths = new List<string>();
+                string jsonString = null;
+                using (ZipArchive archive = ZipFile.OpenRead(filePath))
+                {
+                    foreach (ZipArchiveEntry entry in archive.Entries)
+                    {
+                        #region
+                        //string file = null;
+                        //var dirs = Regex.Split(entry.FullName, "/");
+                        //if (dirs.Last() != "")
+                        //{
+                        //    file = dirs.Last();
+                        //}
+                        //foreach (string dir in dirs)
+                        //{
+                        //    TreeModel tree = new TreeModel()
+                        //    {
+                        //        Id = Guid.NewGuid(),
+                        //        Level = dirs.Length - 1,
+                        //        DirName = dir
+                        //    };
+                        //    tree.FileNames.Add(file);
+                        //}
+                        //stringBuilder.Append(entry); 
+                        #endregion
+                        paths.Add(entry.ToString());
+                    }
+                    jsonString = JSONHelper.ToJSON(paths);
+                }
+                return jsonString; 
+            }
+            catch (Exception e)
+            { 
+                throw;
+            }
+        }
         public static string EncryptStringAes(string plainText, byte[] Key)
         {
             try
@@ -49,47 +94,45 @@ namespace CSZIP.Web.Site.Services
                 throw;
             }
         }
-        public static string DecryptStringFromBytes_Aes(string cipherTextString, byte[] Key)
+        public static string DecryptStringAes(string cipherTextString, byte[] Key)
         {
-            byte[] cipherText = Convert.FromBase64String(cipherTextString);
-            // Check arguments.
-            if (cipherText == null || cipherText.Length <= 0)
-                throw new ArgumentNullException("cipherText");
-            if (Key == null || Key.Length <= 0)
-                throw new ArgumentNullException("Key");
-
-            // Declare the string used to hold
-            // the decrypted text.
-            string plaintext = null;
-
-            // Create an Aes object
-            // with the specified key and IV.
-            using (Aes aesAlg = Aes.Create())
+            try
             {
-                aesAlg.Key = Key;
+                byte[] cipherText = Convert.FromBase64String(cipherTextString);
 
-                // Create a decryptor to perform the stream transform.
-                ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.Key);
+                if (cipherText == null || cipherText.Length <= 0)
+                    throw new ArgumentNullException("cipherText");
+                if (Key == null || Key.Length <= 0)
+                    throw new ArgumentNullException("Key");
 
-                // Create the streams used for decryption.
-                using (MemoryStream msDecrypt = new MemoryStream(cipherText))
+                string plaintext = null;
+
+                using (Aes aesAlg = Aes.Create())
                 {
-                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-                    {
-                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
-                        {
+                    aesAlg.Key = Key;
 
-                            // Read the decrypted bytes from the decrypting stream
-                            // and place them in a string.
-                            plaintext = srDecrypt.ReadToEnd();
+                    ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.Key);
+
+                    using (MemoryStream msDecrypt = new MemoryStream(cipherText))
+                    {
+                        using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                        {
+                            using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                            {
+                                plaintext = srDecrypt.ReadToEnd();
+                            }
                         }
                     }
+
                 }
 
+                return plaintext;
             }
-
-            return plaintext;
-
+            catch (Exception e)
+            {
+                //тут можна підключити свій лог сервіс і писати логи про помилки // _logger.LogError(e);
+                throw;
+            }
         }
     }
 }

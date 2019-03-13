@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using CSZIP.Web.Site.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-using CSZIP.Web.Site.Services;
-using Microsoft.Extensions.Configuration;
+using CSZIP.Web.Site.Services; 
 using Microsoft.Extensions.Options;
-using System.Text;
+using System.Text; 
 
 namespace CSZIP.Web.Site.Controllers
 {
@@ -25,12 +21,12 @@ namespace CSZIP.Web.Site.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadFile(IFormFile file)
         {
-            if(file == null)
-            {
+            if (file == null)
                 return RedirectToAction("Index");
-            }
-            // full path to file in temp location
+             
             var filePath = Path.GetTempFileName();
+
+            string ArchiveFilesTree = null;
 
             if (file.Length > 0)
             {
@@ -38,29 +34,20 @@ namespace CSZIP.Web.Site.Controllers
                 {
                     await file.CopyToAsync(stream); 
                 }
+                ArchiveFilesTree = FileProcessingService.ParseZipDirToJSON(filePath);
             }
 
             byte[] key = Encoding.UTF8.GetBytes(_settings.Value.Key);
-            if(key.Length != 16)
-            {
+            if (key.Length != 16)
                 return Ok("AES Key must be 16 bit => appsettings.json");
-            } 
-            var encrypt = FileProcessingService.EncryptStringAes("Some text", key); 
-            var decrypt = FileProcessingService.DecryptStringFromBytes_Aes(encrypt, key);
 
-            return Ok(new { file.Length, filePath });
+            var encrypt = FileProcessingService.EncryptStringAes(ArchiveFilesTree, key);
+            var decrypt = FileProcessingService.DecryptStringAes(encrypt, key);
+
+            return Ok(encrypt+"________"+decrypt);
         }
         public IActionResult Index()
         {
-            byte[] key = Encoding.UTF8.GetBytes(_settings.Value.Key);
-            if (key.Length != 16)
-                return Ok("AES Key must be 16 bit => appsettings.json");
-            
-            string encrypt = FileProcessingService.EncryptStringAes("Some text", key);
-
-
-            var decrypt = FileProcessingService.DecryptStringFromBytes_Aes(encrypt, key);
-
             return View();
         }
 
