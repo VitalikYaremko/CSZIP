@@ -1,10 +1,13 @@
-﻿using CSZIP.Web.Site.Helpers;
+﻿using CSZIP.Web.Site.Domain.Interfaces;
+using CSZIP.Web.Site.Helpers;
 using CSZIP.Web.Site.Models;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -12,9 +15,20 @@ using System.Threading.Tasks;
 
 namespace CSZIP.Web.Site.Services
 {
-    public class FileProcessingService
+    public class FileProcessingService : IFileProcessingService
     {
-        public static string ParseZipDirToJSON(string filePath)
+        private readonly IConfigurationManager _configurationManager;
+        private readonly string _serviceUrl;
+        public FileProcessingService(IConfigurationManager configurationManager)
+        {
+            _configurationManager = configurationManager;
+            _serviceUrl = _configurationManager.GetConnectionString("CSZIP");
+        }
+        public async Task<object> PostJsonWebRequest(string json)
+        {
+           return await HttpUtils.PostJson($"{_serviceUrl}/api/", json);
+        }
+        public string ParseZipDirToJSON(string filePath)
         {
             try
             {
@@ -47,6 +61,7 @@ namespace CSZIP.Web.Site.Services
                     }
                     jsonString = JSONHelper.ToJSON(paths);
                 }
+                
                 return jsonString; 
             }
             catch (Exception e)
@@ -54,7 +69,7 @@ namespace CSZIP.Web.Site.Services
                 throw;
             }
         }
-        public static string EncryptStringAes(string plainText, byte[] Key)
+        public string EncryptStringAes(string plainText, byte[] Key)
         {
             try
             {

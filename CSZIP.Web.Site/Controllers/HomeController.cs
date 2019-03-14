@@ -6,15 +6,18 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using CSZIP.Web.Site.Services; 
 using Microsoft.Extensions.Options;
-using System.Text; 
+using System.Text;
+using CSZIP.Web.Site.Domain.Interfaces;
 
 namespace CSZIP.Web.Site.Controllers
 {
     public class HomeController : Controller
     {
         private IOptions<AES> _settings;
-        public HomeController(IOptions<AES> settings)
+        private readonly IFileProcessingService _fileProcessingService;
+        public HomeController(IFileProcessingService fileProcessingService, IOptions<AES> settings)
         {
+            _fileProcessingService = fileProcessingService;
             _settings = settings;
         }
 
@@ -34,17 +37,23 @@ namespace CSZIP.Web.Site.Controllers
                 {
                     await file.CopyToAsync(stream); 
                 }
-                ArchiveFilesTree = FileProcessingService.ParseZipDirToJSON(filePath);
+                ArchiveFilesTree = _fileProcessingService.ParseZipDirToJSON(filePath);
             }
 
             byte[] key = Encoding.UTF8.GetBytes(_settings.Value.Key);
             if (key.Length != 16)
                 return Ok("AES Key must be 16 bit => appsettings.json");
 
-            var encrypt = FileProcessingService.EncryptStringAes(ArchiveFilesTree, key);
-            var decrypt = FileProcessingService.DecryptStringAes(encrypt, key);
+            var encrypt = _fileProcessingService.EncryptStringAes(ArchiveFilesTree, key);
 
-            return Ok(encrypt+"________"+decrypt);
+            var result = await _fileProcessingService.PostJsonWebRequest(encrypt);
+
+            // var decrypt = _fileProcessingService.DecryptStringAes(encrypt, key);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return Ok("Error");
         }
         public IActionResult Index()
         {

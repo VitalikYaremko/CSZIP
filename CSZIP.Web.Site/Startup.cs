@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CSZIP.Web.Site.Infrastructure.DependencyInjection;
+using CSZIP.Web.Site.Infrastructure.Modules;
 using CSZIP.Web.Site.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,6 +33,8 @@ namespace CSZIP.Web.Site
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            services.AddModule<DependencyAggregateModule>();
 
             services.Configure<AES>(Configuration.GetSection("AES"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
