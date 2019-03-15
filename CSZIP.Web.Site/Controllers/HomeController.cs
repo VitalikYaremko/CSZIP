@@ -1,24 +1,23 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using CSZIP.Web.Site.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-using CSZIP.Web.Site.Services; 
-using Microsoft.Extensions.Options;
 using System.Text;
 using CSZIP.Web.Site.Domain.Interfaces;
+using CSZIP.Web.Site.Models;
+using CSZIP.Web.Site.Domain.Helpers;
 
 namespace CSZIP.Web.Site.Controllers
 {
     public class HomeController : Controller
     {
-        private IOptions<AES> _settings;
         private readonly IFileProcessingService _fileProcessingService;
-        public HomeController(IFileProcessingService fileProcessingService, IOptions<AES> settings)
+        private readonly IConfigurationManager _configurationManager;
+        public HomeController(IFileProcessingService fileProcessingService, IConfigurationManager configurationManager)
         {
             _fileProcessingService = fileProcessingService;
-            _settings = settings;
+            _configurationManager = configurationManager;
         }
 
         [HttpPost]
@@ -40,15 +39,14 @@ namespace CSZIP.Web.Site.Controllers
                 ArchiveFilesTree = _fileProcessingService.ParseZipDirToJSON(filePath);
             }
 
-            byte[] key = Encoding.UTF8.GetBytes(_settings.Value.Key);
+            byte[] key = Encoding.UTF8.GetBytes(_configurationManager.GetValue("AES:Key"));
             if (key.Length != 16)
                 return Ok("AES Key must be 16 bit => appsettings.json");
 
             var encrypt = _fileProcessingService.EncryptStringAes(ArchiveFilesTree, key);
 
-            var result = await _fileProcessingService.PostJsonWebRequest(encrypt);
-
-            // var decrypt = _fileProcessingService.DecryptStringAes(encrypt, key);
+            var result = await _fileProcessingService.SendJsonToSaveInServer(encrypt, TextHelper.RemoveExtension(file.FileName));
+            
             if (result != null)
             {
                 return Ok(result);

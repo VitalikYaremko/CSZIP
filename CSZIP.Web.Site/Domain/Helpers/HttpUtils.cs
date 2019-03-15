@@ -26,8 +26,7 @@ namespace CSZIP.Web.Site.Helpers
                 post.Timeout = timeout;
                 post.ContentType = "application/json";
                 post.Method = methodType;
-
-                // Byte[] bytes = new ASCIIEncoding().GetBytes(new JavaScriptSerializer().Serialize(obj));
+                 
                 Byte[] bytes = new ASCIIEncoding().GetBytes(JsonConvert.SerializeObject(obj));
 
                 //Set data in request
@@ -35,11 +34,16 @@ namespace CSZIP.Web.Site.Helpers
                 requestStream.Write(bytes, 0, bytes.Length);
                 requestStream.Close();
 
-                //Get the response
+                //Get the response 
                 using (var response = await post.GetResponseAsync())
                 {
                     var responseContent = new StreamReader(response.GetResponseStream()).ReadToEnd();
-                    return JsonConvert.DeserializeObject<T>(responseContent);
+
+                    if ((responseContent.StartsWith("{") && responseContent.EndsWith("}")) || (responseContent.StartsWith("[") && responseContent.EndsWith("]")))
+                    {
+                        return JsonConvert.DeserializeObject<T>(responseContent);
+                    }
+                    return (T)Convert.ChangeType(responseContent, typeof(T));
                 }
             }
             catch (Exception e)

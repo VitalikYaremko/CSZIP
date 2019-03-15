@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CSZIP.Web.Site.Domain.Models;
 using CSZIP.Web.Site.Infrastructure.DependencyInjection;
 using CSZIP.Web.Site.Infrastructure.Modules;
-using CSZIP.Web.Site.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,8 +30,6 @@ namespace CSZIP.Web.Site
             });
 
             services.AddModule<DependencyAggregateModule>();
-
-            services.Configure<AES>(Configuration.GetSection("AES"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

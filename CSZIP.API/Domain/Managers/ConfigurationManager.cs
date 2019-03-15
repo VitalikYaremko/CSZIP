@@ -1,8 +1,8 @@
-﻿using CSZIP.Web.Site.Domain.Interfaces;
+﻿using CSZIP.API.Domain.Interfaces.Managers;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 
-namespace CSZIP.Web.Site.Domain.Managers
+namespace CSZIP.API.Domain.Managers
 {
     public class ConfigurationManager : IConfigurationManager
     {

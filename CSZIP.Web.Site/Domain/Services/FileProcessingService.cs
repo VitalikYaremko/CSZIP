@@ -1,16 +1,10 @@
 ﻿using CSZIP.Web.Site.Domain.Interfaces;
 using CSZIP.Web.Site.Helpers;
-using CSZIP.Web.Site.Models;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Net;
 using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CSZIP.Web.Site.Services
@@ -24,9 +18,9 @@ namespace CSZIP.Web.Site.Services
             _configurationManager = configurationManager;
             _serviceUrl = _configurationManager.GetConnectionString("CSZIP");
         }
-        public async Task<object> PostJsonWebRequest(string json)
+        public async Task<object> SendJsonToSaveInServer(string json,string fileName)
         {
-           return await HttpUtils.PostJson($"{_serviceUrl}/api/", json);
+           return await HttpUtils.PostJson($"{_serviceUrl}/api/decrypt-and-save-json/{fileName}", json);
         }
         public string ParseZipDirToJSON(string filePath)
         {
@@ -84,10 +78,10 @@ namespace CSZIP.Web.Site.Services
                 {
                     aesAlg.Key = Key;
 
-                    // Шифратор для перетворення потоку
+                    // Encryptor to convert the stream
                     ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.Key);
 
-                    // Потоки які необіхдні для шифрування
+                    // Threads that are required for encryption
                     using (MemoryStream msEncrypt = new MemoryStream())
                     {
                         using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
@@ -105,47 +99,7 @@ namespace CSZIP.Web.Site.Services
             }
             catch (Exception e)
             {
-                //тут можна підключити свій лог сервіс і писати логи про помилки // _logger.LogError(e);
-                throw;
-            }
-        }
-        public static string DecryptStringAes(string cipherTextString, byte[] Key)
-        {
-            try
-            {
-                byte[] cipherText = Convert.FromBase64String(cipherTextString);
-
-                if (cipherText == null || cipherText.Length <= 0)
-                    throw new ArgumentNullException("cipherText");
-                if (Key == null || Key.Length <= 0)
-                    throw new ArgumentNullException("Key");
-
-                string plaintext = null;
-
-                using (Aes aesAlg = Aes.Create())
-                {
-                    aesAlg.Key = Key;
-
-                    ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.Key);
-
-                    using (MemoryStream msDecrypt = new MemoryStream(cipherText))
-                    {
-                        using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-                        {
-                            using (StreamReader srDecrypt = new StreamReader(csDecrypt))
-                            {
-                                plaintext = srDecrypt.ReadToEnd();
-                            }
-                        }
-                    }
-
-                }
-
-                return plaintext;
-            }
-            catch (Exception e)
-            {
-                //тут можна підключити свій лог сервіс і писати логи про помилки // _logger.LogError(e);
+                //here you can connect your log service and write error logs // _logger.LogError(e);
                 throw;
             }
         }
