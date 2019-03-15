@@ -49,7 +49,8 @@ namespace CSZIP.Web.Site.Controllers
             
             if (result != null)
             {
-                return Ok(result);
+                ViewData["Result"] = result;
+                return View();
             }
             return Ok("Error");
         }
