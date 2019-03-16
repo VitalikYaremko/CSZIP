@@ -18,6 +18,7 @@ namespace CSZIP.API.Infrastructure.Modules
         {
             services.AddScoped<IProcessingService, ProcessingService>();
             services.AddScoped<IConfigurationManager, ConfigurationManager>();
+            services.AddScoped<ILogger, Logger>();
         }
     }
 }

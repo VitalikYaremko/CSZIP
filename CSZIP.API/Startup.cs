@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CSZIP.API.Domain.Extensions;
 using CSZIP.API.Infrastructure.DependencyInjection;
 using CSZIP.API.Infrastructure.Modules;
 using Microsoft.AspNetCore.Builder;
@@ -42,6 +43,7 @@ namespace CSZIP.API
             {
                 app.UseHsts();
             }
+            app.HandleErrors(); // Register middleware
             app.UseStaticFiles(); //letting the application know that we need access to wwwroot folder.
             app.UseHttpsRedirection();
             app.UseMvc();
