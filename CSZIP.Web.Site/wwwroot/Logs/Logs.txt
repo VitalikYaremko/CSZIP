@@ -1,0 +1,63 @@
+--[
+In method CSZIP.Web.Site.Controllers.HomeController.UploadFile (CSZIP.Web.Site) an exception occured: 
+ End of Central Directory record could not be found. 
+    at System.IO.Compression.ZipArchive.ReadEndOfCentralDirectory()
+   at System.IO.Compression.ZipArchive.Init(Stream stream, ZipArchiveMode mode, Boolean leaveOpen)
+   at System.IO.Compression.ZipArchive..ctor(Stream stream, ZipArchiveMode mode, Boolean leaveOpen, Encoding entryNameEncoding)
+   at System.IO.Compression.ZipFile.Open(String archiveFileName, ZipArchiveMode mode, Encoding entryNameEncoding)
+   at System.IO.Compression.ZipFile.OpenRead(String archiveFileName)
+   at CSZIP.Web.Site.Services.FileProcessingService.ParseZipDirToJSON(String filePath) in D:\WORK\Test\CSZIP\CSZIP.Web.Site\Domain\Services\FileProcessingService.cs:line 32
+   at CSZIP.Web.Site.Controllers.HomeController.UploadFile(IFormFile file) in D:\WORK\Test\CSZIP\CSZIP.Web.Site\Controllers\HomeController.cs:line 42
+   at Microsoft.AspNetCore.Mvc.Internal.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at System.Threading.Tasks.ValueTask`1.get_Result()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeActionMethodAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeNextActionFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeInnerFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeNextExceptionFilterAsync()
+_____________________________
+3/16/2019 5:49:41 PM
+]--
+--[
+In method CSZIP.Web.Site.Controllers.HomeController.UploadFile (CSZIP.Web.Site) an exception occured: 
+ End of Central Directory record could not be found. 
+    at System.IO.Compression.ZipArchive.ReadEndOfCentralDirectory()
+   at System.IO.Compression.ZipArchive.Init(Stream stream, ZipArchiveMode mode, Boolean leaveOpen)
+   at System.IO.Compression.ZipArchive..ctor(Stream stream, ZipArchiveMode mode, Boolean leaveOpen, Encoding entryNameEncoding)
+   at System.IO.Compression.ZipFile.Open(String archiveFileName, ZipArchiveMode mode, Encoding entryNameEncoding)
+   at System.IO.Compression.ZipFile.OpenRead(String archiveFileName)
+   at CSZIP.Web.Site.Services.FileProcessingService.ParseZipDirToJSON(String filePath) in D:\WORK\Test\CSZIP\CSZIP.Web.Site\Domain\Services\FileProcessingService.cs:line 32
+   at CSZIP.Web.Site.Controllers.HomeController.UploadFile(IFormFile file) in D:\WORK\Test\CSZIP\CSZIP.Web.Site\Controllers\HomeController.cs:line 42
+   at Microsoft.AspNetCore.Mvc.Internal.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at System.Threading.Tasks.ValueTask`1.get_Result()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeActionMethodAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeNextActionFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeInnerFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeNextExceptionFilterAsync()
+_____________________________
+3/16/2019 5:49:51 PM
+]--
+--[
+In method CSZIP.Web.Site.Controllers.HomeController.UploadFile (CSZIP.Web.Site) an exception occured: 
+ End of Central Directory record could not be found. 
+    at System.IO.Compression.ZipArchive.ReadEndOfCentralDirectory()
+   at System.IO.Compression.ZipArchive.Init(Stream stream, ZipArchiveMode mode, Boolean leaveOpen)
+   at System.IO.Compression.ZipArchive..ctor(Stream stream, ZipArchiveMode mode, Boolean leaveOpen, Encoding entryNameEncoding)
+   at System.IO.Compression.ZipFile.Open(String archiveFileName, ZipArchiveMode mode, Encoding entryNameEncoding)
+   at System.IO.Compression.ZipFile.OpenRead(String archiveFileName)
+   at CSZIP.Web.Site.Services.FileProcessingService.ParseZipDirToJSON(String filePath) in D:\WORK\Test\CSZIP\CSZIP.Web.Site\Domain\Services\FileProcessingService.cs:line 32
+   at CSZIP.Web.Site.Controllers.HomeController.UploadFile(IFormFile file) in D:\WORK\Test\CSZIP\CSZIP.Web.Site\Controllers\HomeController.cs:line 42
+   at Microsoft.AspNetCore.Mvc.Internal.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at System.Threading.Tasks.ValueTask`1.get_Result()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeActionMethodAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeNextActionFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeInnerFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeNextExceptionFilterAsync()
+_____________________________
+3/16/2019 5:53:16 PM
+]--

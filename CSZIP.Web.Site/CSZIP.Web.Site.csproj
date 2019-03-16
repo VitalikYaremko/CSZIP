@@ -11,4 +11,14 @@
     <PackageReference Include="Ninject" Version="3.3.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\Shared\Error404.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Logs\" />
+  </ItemGroup>
+
 </Project>

@@ -1,5 +1,6 @@
 ﻿using CSZIP.Web.Site.Domain.Interfaces;
 using CSZIP.Web.Site.Helpers;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -59,7 +60,7 @@ namespace CSZIP.Web.Site.Services
                 return jsonString; 
             }
             catch (Exception e)
-            { 
+            {
                 throw;
             }
         }

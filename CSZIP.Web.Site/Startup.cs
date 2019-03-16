@@ -2,11 +2,13 @@
 using CSZIP.Web.Site.Infrastructure.DependencyInjection;
 using CSZIP.Web.Site.Infrastructure.Modules;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.IO;
 
 namespace CSZIP.Web.Site
 {
@@ -36,15 +38,7 @@ namespace CSZIP.Web.Site
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
-            }
+            app.UseStatusCodePagesWithReExecute("/Home/Error", "?statusCode={0}");
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

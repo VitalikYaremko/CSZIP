@@ -1,5 +1,6 @@
 ﻿using CSZIP.Web.Site.Domain.Interfaces;
 using CSZIP.Web.Site.Domain.Managers;
+using CSZIP.Web.Site.Domain.Services;
 using CSZIP.Web.Site.Infrastructure.DependencyInjection;
 using CSZIP.Web.Site.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +13,7 @@ namespace CSZIP.Web.Site.Infrastructure.Modules
         {
             services.AddScoped<IFileProcessingService, FileProcessingService>();
             services.AddScoped<IConfigurationManager, ConfigurationManager>();
+            services.AddScoped<ILogger, Logger>();
         }
     }
 }
