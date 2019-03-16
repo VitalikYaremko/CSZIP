@@ -38,7 +38,9 @@ namespace CSZIP.Web.Site
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+
             app.UseStatusCodePagesWithReExecute("/Home/Error", "?statusCode={0}");
+            app.UseHsts();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

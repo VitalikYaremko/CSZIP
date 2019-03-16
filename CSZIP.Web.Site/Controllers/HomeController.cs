@@ -11,17 +11,17 @@ using CSZIP.Web.Site.Infrastructure.Filters;
 
 namespace CSZIP.Web.Site.Controllers
 {
+    [CustomExceptionFilter]
     public class HomeController : Controller
     {
         private readonly IFileProcessingService _fileProcessingService;
         private readonly IConfigurationManager _configurationManager;
-        private readonly ILogger _logger;
         public HomeController(IFileProcessingService fileProcessingService, IConfigurationManager configurationManager)
         {
             _fileProcessingService = fileProcessingService;
             _configurationManager = configurationManager;
         }
-        [CustomExceptionFilter]
+
         [HttpPost]
         public async Task<IActionResult> UploadFile(IFormFile file)
         {
@@ -73,6 +73,12 @@ namespace CSZIP.Web.Site.Controllers
                     return View(viewName);
                 }
             }
+            return View();
+        }
+        
+        public IActionResult TestInternalServerError()
+        {
+            _fileProcessingService.ParseZipDirToJSON("wrongPath");
             return View();
         }
     }
