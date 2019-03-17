@@ -12,19 +12,26 @@ namespace CSZIP.Web.Site.Domain.Services
     {
         public async void LogError(string error)
         {
-            string createdOn = DateTime.Now.ToString();
-            string pathFoulder = "wwwroot\\Logs";
-            string path = Path.Combine(Directory.GetCurrentDirectory(), pathFoulder, "Logs.txt");
-            
-            StringBuilder sb = new StringBuilder();
+            try
+            {
+                string createdOn = DateTime.Now.ToString();
+                string pathFoulder = "wwwroot\\Logs";
+                string path = Path.Combine(Directory.GetCurrentDirectory(), pathFoulder, "Logs.txt");
 
-            sb.AppendLine("--[");
-            sb.AppendLine(error);
-            sb.AppendLine("_____________________________");
-            sb.AppendLine(createdOn);
-            sb.AppendLine("]--");
+                StringBuilder sb = new StringBuilder();
 
-            await File.AppendAllTextAsync(path, sb.ToString());
+                sb.AppendLine("--[");
+                sb.AppendLine(error);
+                sb.AppendLine("_____________________________");
+                sb.AppendLine(createdOn);
+                sb.AppendLine("]--");
+
+                await File.AppendAllTextAsync(path, sb.ToString());
+            }
+            catch (Exception)
+            { 
+                throw;
+            }
         }
     }
 }

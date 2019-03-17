@@ -8,6 +8,7 @@ using CSZIP.Web.Site.Domain.Interfaces;
 using CSZIP.Web.Site.Models;
 using CSZIP.Web.Site.Domain.Helpers;
 using CSZIP.Web.Site.Infrastructure.Filters;
+using Microsoft.AspNetCore.Hosting;
 
 namespace CSZIP.Web.Site.Controllers
 {
@@ -23,15 +24,25 @@ namespace CSZIP.Web.Site.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadFile(IFormFile file)
+        [RequestFormLimits(MultipartBodyLengthLimit = 209715200)]
+        [RequestSizeLimit(209715200)]
+        public async Task<IActionResult> UploadFile(IFormFile file, [FromServices] IHostingEnvironment env)
         {
-
-            if (file == null)
-                return RedirectToAction("Index");
+            string fileName = $"{env.WebRootPath}\\{file.FileName}";
+            if (file == null || file.Length == 0)
+            {
+                ViewData["Result"] = "File not selected";
+                return View();
+            }
+            if (file.ContentType != "application/x-zip-compressed")
+            {
+                ViewData["Result"] = "The wrong format of file, must be .zip ";
+                return View();
+            }
 
             var filePath = Path.GetTempFileName();
 
-            string ArchiveFilesTree = null;
+            string JsonFoulderAndFiles = null;
 
             if (file.Length > 0)
             {
@@ -39,23 +50,19 @@ namespace CSZIP.Web.Site.Controllers
                 {
                     await file.CopyToAsync(stream);
                 }
-                ArchiveFilesTree = _fileProcessingService.ParseZipDirToJSON(filePath);
+                JsonFoulderAndFiles = _fileProcessingService.ParseZipDirToJSON(filePath);
             }
 
-            byte[] key = Encoding.UTF8.GetBytes(_configurationManager.GetValue("AES:Key"));
+            byte[] key = Encoding.UTF8.GetBytes(_configurationManager.GetValue("AES:Key"));// берем ключи із appsettings.json
             if (key.Length != 16)
                 return Ok("AES Key must be 16 bit => appsettings.json");
 
-            var encrypt = _fileProcessingService.EncryptStringAes(ArchiveFilesTree, key);
+            var encrypt = _fileProcessingService.EncryptStringAes(JsonFoulderAndFiles, key);// зашифровуємо 
 
-            var result = await _fileProcessingService.SendJsonToSaveInServer(encrypt, TextHelper.RemoveExtension(file.FileName));
+            var result = await _fileProcessingService.SendJsonToSaveInServer(encrypt, TextHelper.RemoveExtension(file.FileName));// надсилаємо на сервер
 
-            if (result != null)
-            {
-                ViewData["Result"] = result;
-                return View();
-            }
-            return Ok("Error");
+            ViewData["Result"] = result;
+            return View(); 
         }
         public IActionResult Index()
         {
