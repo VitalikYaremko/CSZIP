@@ -56,8 +56,7 @@ namespace CSZIP.Web.Site
             }
 
             app.UseHttpsRedirection();
-
-            //app.HandleErrors(); // Register middleware
+             
             app.UseStaticFiles(); //letting the application know that we need access to wwwroot folder.
 
             app.UseCookiePolicy();

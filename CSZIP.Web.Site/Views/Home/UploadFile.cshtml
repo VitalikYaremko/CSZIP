@@ -1,7 +1,6 @@
 ﻿@{
     ViewData["Title"] = "UploadFile";
 }
-
 <div class="modal-dialog">
     <h3>Select Zip File</h3>
     <div class="modal-content">
@@ -25,13 +24,24 @@
             </div>
         </form>
     </div>
+    <h4>@ViewData["Result"]</h4>
 </div>
-<h4>@ViewData["Result"]</h4>
+
+
 @section Scripts {
     <script type="text/javascript">
         $(document).on('change', ':file', function () {
             var input = $(this)
             var label = $('#BrowseInput').val(input.val().replace(/\\/g, '/').replace(/.*\//, ''));
+        });
+        $('#FileInput').bind('change', function () {
+            if (this.files[0].size > 30000000) {
+                $('#UploadFile').prop('disabled', true);
+                alert("file is too large");
+            }
+            else {
+                $('#UploadFile').prop('disabled', false);
+            }
         });
     </script>
 }

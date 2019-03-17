@@ -100,7 +100,6 @@ namespace CSZIP.Web.Site.Services
             }
             catch (Exception e)
             {
-                //here you can connect your log service and write error logs // _logger.LogError(e);
                 throw;
             }
         }

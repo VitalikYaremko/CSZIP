@@ -4,11 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Text;
-using CSZIP.Web.Site.Domain.Interfaces;
-using CSZIP.Web.Site.Models;
+using CSZIP.Web.Site.Domain.Interfaces; 
 using CSZIP.Web.Site.Domain.Helpers;
-using CSZIP.Web.Site.Infrastructure.Filters;
-using Microsoft.AspNetCore.Hosting;
+using CSZIP.Web.Site.Infrastructure.Filters; 
 
 namespace CSZIP.Web.Site.Controllers
 {
@@ -26,9 +24,8 @@ namespace CSZIP.Web.Site.Controllers
         [HttpPost]
         [RequestFormLimits(MultipartBodyLengthLimit = 209715200)]
         [RequestSizeLimit(209715200)]
-        public async Task<IActionResult> UploadFile(IFormFile file, [FromServices] IHostingEnvironment env)
+        public async Task<IActionResult> UploadFile(IFormFile file)
         {
-            string fileName = $"{env.WebRootPath}\\{file.FileName}";
             if (file == null || file.Length == 0)
             {
                 ViewData["Result"] = "File not selected";
@@ -66,7 +63,7 @@ namespace CSZIP.Web.Site.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            return View("UploadFile");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

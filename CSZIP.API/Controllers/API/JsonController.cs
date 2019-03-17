@@ -22,7 +22,7 @@ namespace CSZIP.API.Controllers.API
         {
             var res = _processingService.DecryptStringAes(json, null);
             var path = await _processingService.StoreJsonInFile(res, fileName);
-            return Ok("Success, (шлях вертаю для зручності) => " + path);
+            return Ok("Success => " + path);
         }
     }
 }
